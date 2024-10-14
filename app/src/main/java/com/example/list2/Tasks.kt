@@ -1,8 +1,5 @@
 package com.example.list2
 fun main() {
-    val array1 = arrayOf(1, 2, 3, 4, 5,21, 31, 41, 42, 51, 61, 71, 88, 99, 100, 99, 12, 17, 17, 18)
-    consoleHistogram(array1)
-
     task1()
     triangle(3, 4, 5)
     task3()
@@ -12,7 +9,8 @@ fun main() {
     bracketsCount("(()))")
     CeasarCode(3)
     task9()
-
+    val array1 = arrayOf(1, 2, 3, 4, 5,21, 31, 41, 42, 51, 61, 71, 88, 99, 100, 99, 12, 17, 17, 18)
+    consoleHistogram(array1)
 
 }
 
@@ -27,7 +25,6 @@ fun task1(){
     val matrix1 = arrayOf(arrayOf(1, 2, 3), arrayOf(4, 5, 6), arrayOf(7, 8, 9))
     val matrix2 = arrayOf(arrayOf(10, 11, 12), arrayOf(13, 14, 15), arrayOf(16, 17, 18))
     matrix(matrix1, matrix2, 2, 3, 1, 2) //k and l are the coordinates of arrays, kk and ll are the coordinates of the element in the array
-
 }
 
 fun array(arr1: Array<Int>, arr2: Array<Int>, k: Int, l: Int) {
@@ -57,12 +54,17 @@ fun arrayPrinter(arr1: Array<Int>){
     }
     println()
 }
-fun checker(arr1: Array<Int>, numb: Int): Int {
+fun checker(arr: Array<Int>, numb: Int): Int {
     var newNumb = numb
     while (true) {
-        if (newNumb < 0 || newNumb >= arr1.size) {
+        if (newNumb < 0 || newNumb >= arr.size) {
             println("Index $newNumb is out of bounds. Choose new index: ")
-            newNumb = readln().toInt()
+            var input = readln()
+            while(input.toIntOrNull() == null){
+                println("Index must be an integer! Choose another number: ")
+                input = readln()
+            }
+            newNumb = input.toInt()
         } else
             return newNumb
     }
@@ -106,7 +108,12 @@ fun matrixChecker(matrix: Array<Array<Int>>, numb: Int): Int {
     while (true) {
         if (newNumb < 0 || newNumb >= matrix.size) {
             println("Index $newNumb is out of bounds. Choose new index: ")
-            newNumb = readln().toInt()
+            var input = readln()
+            while(input.toIntOrNull() == null){
+                println("Index must be an integer! Choose another number: ")
+                input = readln()
+            }
+            newNumb = input.toInt()
         } else
             return newNumb
     }
@@ -126,8 +133,10 @@ fun task3() {
     println("Select 6 numbers from 1 to 49 or type 'quick pick' for an automatic pick: ")
     val numbers = Array(6) { 0 }
     for (i in 1..6) {
-        if (readln() == "quick pick") {
-            for (j in 1..6) {
+        println("Choose number $i: ")
+        var input = readln()
+        if (input == "quick pick") {
+            for (j in i..6) {
                 var random = (1..49).random()
                 while(numbers.contains(random)){ //Okay, okay I KNOW that I used the same five lines of code in lottoarray function but do I REALLY want to create a small function just for that??
                     random = (1..49).random()
@@ -135,14 +144,21 @@ fun task3() {
                 numbers[j - 1] = random
             }
             break
+        } else while(input.toIntOrNull() == null){
+            println("Input must be an integer! Choose another number: ")
+            input = readln()
         }
-        println("Choose number $i: ")
-        var number = readln().toInt()
-        while (number < 1 || number > 49 || numbers.contains(number)) {
+        var inputInt = input.toInt()
+        while (inputInt < 1 || inputInt > 49 || numbers.contains(inputInt)) {
             println("Number is out of bounds or already chosen. Choose another number: ")
-            number = readln().toInt()
+            input = readln()
+            while(input.toIntOrNull() == null){
+                println("Input must be an integer! Choose another number: ")
+                input = readln()
+            }
+            inputInt = input.toInt()
         }
-        numbers[i - 1] = number
+        numbers[i - 1] = inputInt
     }
     println("Your numbers are: ")
     arrayPrinter(numbers) //Something like an arrayPrinter should be in the basic Kotlin/Java library...
@@ -193,7 +209,8 @@ fun vowels(text: String): Int{ //we have done LITERALLY the same thing in Python
 
 fun palindrome(): Boolean{ //that was fast
     println("Type a word: ")
-    val word = readln()
+    var word = readln()
+    word = word.uppercase()
     return word == word.reversed()
 }
 
@@ -202,23 +219,23 @@ fun bracketsCount(expression: String) {
     var isCorrect = 0
     for(i in charTable){
         if(isCorrect < 0){
-            println("The expression is incorrect")
+            println("The expression ' $expression ' is incorrect")
             return
         } else if(i == '(')
             isCorrect++ //I am actually quite proud of this solution - it was unironically revealed to me in a dream
         else if(i == ')')
             isCorrect--
     }
-    if(isCorrect < 0)
-        println("The expression is incorrect")
+    if(isCorrect != 0)
+        println("The expression ' $expression ' is incorrect")
     else
-        println("The expression is correct")
+        println("The expression ' $expression ' is correct")
 }
 
 fun CeasarCode(n: Int){ //I have done this task AT LEAST three times already - in Java, Python and C++. Also Kotlin is screaming at me that function's name should start with a lowercase letter
     println("Type a text using ONLY uppercase letters: ") //65 -> A, 90 -> Z
     var text = readln()
-    text = text.uppercase() //why cant I use toUpperCase() as always?? Also I know that I didnt have to do that but honestly it makes things more user-protected
+    text = text.uppercase() //why cant I use toUpperCase() as always?? I know that I didnt have to do that but honestly it makes things more user-safe
     var charArray = text.toCharArray()
     println("The text is: ")
     println(charArray)
@@ -228,29 +245,41 @@ fun CeasarCode(n: Int){ //I have done this task AT LEAST three times already - i
         else
             charArray[i] = (charArray[i] + n)
     }
-    println("The coded text is: ")
+    println("The coded (by n = $n) text is: ")
     println(charArray)
 }
 
-fun baseToExp(base: Int, exp: Int): Int{
-    var result = 1
+fun baseToExp(base: Int, exp: Int): Long{ //Why have I decided to use LONG here? Exponential function rises really fast so I have to avoid overflow
+    var result = 1L
+    val newBase = base.toLong()
     for(i in 1..exp)
-        result *= base
+        result *= newBase
     return result
 }
 fun task9(){
     println("Type the base: ")
-    val base = readln().toInt() //making sure that the base is an Integer
+    var input = readln()
+    while(input.toIntOrNull() == null){
+        println("Base must be an integer! Choose another number: ")
+        input = readln()
+    }
+    val base = input.toInt()
     println("Type the exponent: ")
-    var exp = readln().toInt() //the same as above
+    input = readln()
+    while(input.toIntOrNull() == null){
+        println("Exponent must be an integer! Choose another number: ")
+        input = readln()
+    }
+    var exp = input.toInt()
     while (exp < 0){
         println("The exponent cannot be negative! Please choose a new exponent: ")
         exp = readln().toInt()
     }
     println("The result is: " + baseToExp(base, exp))
 }
+
 fun consoleHistogram(n:Array<Int>){
-    var howMany = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    val howMany = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     for(i in n){
         when(i){
             in 0..9 -> howMany[0]++
@@ -298,10 +327,7 @@ fun consoleHistogram(n:Array<Int>){
             for(j in 0..8)
                 print("${j*10} - ${j*10+9}  ")
             print("90 - 100")
-
     }
-
-
 }
 println()
 }
