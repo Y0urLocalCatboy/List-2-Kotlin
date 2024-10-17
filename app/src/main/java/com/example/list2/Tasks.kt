@@ -200,7 +200,7 @@ fun dice(): Array<Int>{
 fun vowels(text: String): Int{ //we have done LITERALLY the same thing in Python
     var counter = 0
     for(i in text){
-        if(i == 'a' || i == 'e' || i == 'i' || i == 'o' || i == 'u')
+        if(i == 'y' || i == 'a' || i == 'e' || i == 'i' || i == 'o' || i == 'u')
             counter++
     }
     return counter
