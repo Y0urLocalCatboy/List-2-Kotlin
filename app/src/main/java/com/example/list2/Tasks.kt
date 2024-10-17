@@ -15,7 +15,6 @@ fun main() {
 }
 
 fun task1(){
-    CeasarCode(3)
     println("Task 1, arrays (OUR INDEXES START WITH 0): ")
     val array1 = arrayOf(1, 2, 3, 4, 5)
     val array2 = arrayOf(6, 7, 8, 9, 10)
